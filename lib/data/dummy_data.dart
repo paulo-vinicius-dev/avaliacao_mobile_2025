@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:avaliacao_mobile_2025/models/genre.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
+import 'package:avaliacao_mobile_2025/models/review.dart';
 
 const genres = [
   Genre(
@@ -112,5 +113,56 @@ List<Game> games = [
     title: "Mineirinho Ultra Adventures",
     imageUrl: "",
     releaseDate: DateTime(2017, 1, 27),
+  ),
+];
+
+const reviews = [
+  Reviews(
+    id: 1,
+    gameId: 1,
+    rating: 4,
+    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+  ),
+  Reviews(
+    id: 2,
+    gameId: 1,
+    rating: 5,
+    comment: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  ),
+  Reviews(
+    id: 3,
+    gameId: 2,
+    rating: 4,
+    comment: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  ),
+  Reviews(
+    id: 4,
+    gameId: 3,
+    rating: 5,
+    comment: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  ),
+  Reviews(
+    id: 5,
+    gameId: 4,
+    rating: 3,
+    comment: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+  ),
+  Reviews(
+    id: 6,
+    gameId: 5,
+    rating: 4,
+    comment: "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
+  ),
+  Reviews(
+    id: 7,
+    gameId: 6,
+    rating: 4,
+    comment: "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
+  ),
+  Reviews(
+    id: 8,
+    gameId: 7,
+    rating: 4,
+    comment: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos"
   ),
 ];
