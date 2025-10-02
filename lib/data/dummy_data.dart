@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:avaliacao_mobile_2025/models/genre.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
-import 'package:avaliacao_mobile_2025/models/review.dart';
+import 'package:avaliacao_mobile_2025/models/genre.dart';
 
 const genres = [
   Genre(
@@ -35,134 +33,169 @@ const genres = [
     title: "Simulação",
     color: Colors.orange,
   ),
-];
-
-List<Game> games = [
-  Game(
-    id: 1,
-    genreId: 1,
-    title: "God Of War (2018)",
-    imageUrl: "",
-    releaseDate: DateTime(2018, 4, 20),
-  ),
-  Game(
-    id: 2,
-    genreId: 2,
-    title: "Uncharted 4: A Thief's End",
-    imageUrl: "",
-    releaseDate: DateTime(2016, 5, 10),
-  ),
-  Game(
-    id: 3,
-    genreId: 3,
-    title: "The Legend of Zelda: Breath of the Wild",
-    imageUrl: "",
-    releaseDate: DateTime(2017, 3, 3),
-  ),
-  Game(
-    id: 4,
-    genreId: 4,
-    title: "EA Sports FC 25",
-    imageUrl: "",
-    releaseDate: DateTime(2025, 9, 26),
-  ),  Game(
-    id: 5,
-    genreId: 1,
-    title: "Spider-Man 2",
-    imageUrl: "",
-    releaseDate: DateTime(2023, 10, 20),
-  ),
-  Game(
-    id: 6,
-    genreId: 2,
-    title: "Horizon Zero Dawn",
-    imageUrl: "",
-    releaseDate: DateTime(2017, 2, 28),
-  ),
-  Game(
+  // Novos Gêneros Adicionados:
+  Genre(
     id: 7,
-    genreId: 3,
-    title: "Final Fantasy VII Remake",
-    imageUrl: "",
-    releaseDate: DateTime(2020, 4, 10),
+    title: "Mundo Aberto",
+    color: Colors.teal,
   ),
-  Game(
+  Genre(
     id: 8,
-    genreId: 5,
-    title: "Civilization VI",
-    imageUrl: "",
-    releaseDate: DateTime(2016, 10, 21),
+    title: "Plataforma",
+    color: Colors.pink,
   ),
-  Game(
+  Genre(
     id: 9,
-    genreId: 6,
-    title: "The Sims 4",
-    imageUrl: "",
-    releaseDate: DateTime(2014, 9, 2),
+    title: "Terror",
+    color: Colors.black,
   ),
-  Game(
+  Genre(
     id: 10,
-    genreId: 1,
-    title: "Doom Eternal",
-    imageUrl: "",
-    releaseDate: DateTime(2020, 3, 20),
+    title: "FPS",
+    color: Colors.brown,
   ),
-    Game(
+  Genre(
     id: 11,
-    genreId: 2,
-    title: "Mineirinho Ultra Adventures",
-    imageUrl: "",
-    releaseDate: DateTime(2017, 1, 27),
+    title: "Sobrevivência",
+    color: Colors.indigo,
   ),
 ];
 
-const reviews = [
-  Reviews(
-    id: 1,
-    gameId: 1,
-    rating: 4,
-    comment: "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.",
+List<Game> myGames = [
+  Game(
+    id: '1',
+    title: 'The Witcher 3',
+    imageUrl: 'https://cdn.awsli.com.br/2500x2500/1610/1610163/produto/177701502/poster-the-witcher-3-d-b3cd5d55.jpg',
+    genres: [3, 2, 7],
+    releaseDate: DateTime(2015, 5, 19),
+    status: gameStatus.Concluido,
   ),
-  Reviews(
-    id: 2,
-    gameId: 1,
-    rating: 5,
-    comment: "Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.",
+  Game(
+    id: '2',
+    title: 'Cyberpunk 2077',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/header.jpg',
+    genres: [3, 7],
+    releaseDate: DateTime(2020, 12, 10),
+    status: gameStatus.Jogando,
   ),
-  Reviews(
-    id: 3,
-    gameId: 2,
-    rating: 4,
-    comment: "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+  Game(
+    id: '3',
+    title: 'God of War',
+    imageUrl: 'https://image.api.playstation.com/vulcan/img/rnd/202010/2217/k1laGX3Ita2N6Jlb7BbkHYAr.png',
+    genres: [1, 2],
+    releaseDate: DateTime(2018, 4, 20),
+    status: gameStatus.Concluido,
   ),
-  Reviews(
-    id: 4,
-    gameId: 3,
-    rating: 5,
-    comment: "Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+  Game(
+    id: '4',
+    title: 'Elden Ring',
+    imageUrl: 'https://i.redd.it/9jr2a68dx24b1.png',
+    genres: [3, 7],
+    releaseDate: DateTime(2022, 2, 25),
+    status: gameStatus.Jogando,
   ),
-  Reviews(
-    id: 5,
-    gameId: 4,
-    rating: 3,
-    comment: "Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt.",
+  Game(
+    id: '5',
+    title: 'Magic: The gathering',
+    imageUrl: 'https://img.odcdn.com.br/wp-content/uploads/2024/12/imagem_2024-12-30_170314856.png',
+    genres: [5],
+    releaseDate: DateTime(1993, 12, 5),
+    status: gameStatus.Aposentado,
   ),
-  Reviews(
-    id: 6,
-    gameId: 5,
-    rating: 4,
-    comment: "Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem.",
+  Game(
+    id: '6',
+    title: 'Hollow Knight',
+    imageUrl: 'https://static0.gamerantimages.com/wordpress/wp-content/uploads/2024/12/mixcollage-07-dec-2024-08-04-am-836.jpg',
+    genres: [8, 2],
+    releaseDate: DateTime(2017, 2, 24),
+    status: gameStatus.DesejoIniciar,
   ),
-  Reviews(
-    id: 7,
-    gameId: 6,
-    rating: 4,
-    comment: "Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?",
+  Game(
+    id: '7',
+    title: 'Red Dead Redemption 2',
+    imageUrl: 'https://upload.wikimedia.org/wikipedia/pt/e/e7/Red_Dead_Redemption_2.png',
+    genres: [7, 2],
+    releaseDate: DateTime(2018, 10, 26),
+    status: gameStatus.Jogando,
   ),
-  Reviews(
-    id: 8,
-    gameId: 7,
-    rating: 4,
-    comment: "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos"
+  Game(
+    id: '8',
+    title: 'Dark Souls III',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/374320/header.jpg',
+    genres: [3, 1],
+    releaseDate: DateTime(2016, 3, 24),
+    status: gameStatus.Concluido,
+  ),
+  Game(
+    id: '9',
+    title: 'Resident Evil 4 Remake',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/2050650/header.jpg',
+    genres: [9, 1, 2],
+    releaseDate: DateTime(2023, 3, 24),
+    status: gameStatus.DesejoIniciar,
+  ),
+  Game(
+    id: '10',
+    title: 'Sekiro: Shadows Die Twice',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/814380/header.jpg',
+    genres: [1, 2],
+    releaseDate: DateTime(2019, 3, 22),
+    status: gameStatus.Concluido,
+  ),
+  Game(
+    id: '11',
+    title: 'DOOM Eternal',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/782330/header.jpg',
+    genres: [10, 1],
+    releaseDate: DateTime(2020, 3, 20),
+    status: gameStatus.Jogando,
+  ),
+  Game(
+    id: '12',
+    title: 'Stardew Valley',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/413150/header.jpg',
+    genres: [6, 11, 2],
+    releaseDate: DateTime(2016, 2, 26),
+    status: gameStatus.DesejoIniciar,
+  ),
+  Game(
+    id: '13',
+    title: 'The Legend of Zelda: Breath of the Wild',
+    imageUrl: 'https://assets.nintendo.com/image/upload/ar_16:9,b_auto:border,c_pad,dpr_2.0,f_auto,q_auto,w_1200/v1/ncom/en_US/games/switch/t/the-legend-of-zelda-breath-of-the-wild-switch/hero',
+    genres: [2, 7, 3],
+    releaseDate: DateTime(2017, 3, 3),
+    status: gameStatus.Concluido,
+  ),
+  Game(
+    id: '14',
+    title: 'Assassin’s Creed Valhalla',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/2208920/header.jpg',
+    genres: [7, 1, 2],
+    releaseDate: DateTime(2020, 11, 10),
+    status: gameStatus.DesejoIniciar,
+  ),
+  Game(
+    id: '15',
+    title: 'Marvel Rivals',
+    imageUrl: 'https://sm.ign.com/ign_br/cover/m/marvel-riv/marvel-rivals_ypwz.jpg',
+    genres: [10, 5],
+    releaseDate: DateTime(2024, 12, 2),
+    status: gameStatus.Jogando,
+  ),
+  Game(
+    id: '16',
+    title: 'Hades',
+    imageUrl: 'https://cdn.cloudflare.steamstatic.com/steam/apps/1145360/header.jpg',
+    genres: [3, 1],
+    releaseDate: DateTime(2020, 9, 17),
+    status: gameStatus.Concluido,
+  ),
+  Game(
+    id: '17',
+    title: 'Minecraft',
+    imageUrl: 'https://tse4.mm.bing.net/th/id/OIP.Ak_R_TT72TOXYxT6x7auIAHaLH?rs=1&pid=ImgDetMain&o=7&rm=3',
+    genres: [11, 6, 2],
+    releaseDate: DateTime(2011, 11, 18),
+    status: gameStatus.Jogando,
   ),
 ];
