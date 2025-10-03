@@ -1,15 +1,26 @@
+enum gameStatus {
+  Jogando,
+  Concluido,
+  DesejoIniciar,
+  Aposentado,
+}
+
 class Game {
-  Game({
+  const Game({
     required this.id,
-    required this.genreId,
     required this.title,
     required this.imageUrl,
+    required this.genres,
     required this.releaseDate,
+    required this.status,
+    this.hoursPlayed = 0,
   });
 
-  final int id;
-  final int genreId;
+  final String id;
   final String title;
   final String imageUrl;
+  final List<int> genres;
   final DateTime releaseDate;
+  final gameStatus status;
+  final num hoursPlayed;
 }

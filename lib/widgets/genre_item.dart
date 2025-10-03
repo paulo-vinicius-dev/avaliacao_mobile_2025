@@ -1,6 +1,4 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
 import 'package:avaliacao_mobile_2025/models/genre.dart';
 
 class GenreItem extends StatelessWidget {
@@ -19,7 +17,7 @@ class GenreItem extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(16),
+            borderRadius: BorderRadius.circular(10),
             gradient: LinearGradient(
               colors: [
                 genre.color.withValues(alpha: 0.55),
@@ -29,10 +27,13 @@ class GenreItem extends StatelessWidget {
               end: Alignment.bottomRight,
             ),
           ),
-          child: Text(
-            genre.title,
-            style: Theme.of(context).textTheme.titleLarge!.copyWith(
-              color: Theme.of(context).colorScheme.onSurface,
+          child: Center(
+            child: Text(
+              genre.title,
+              style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
+              textAlign: TextAlign.center,
             ),
           ),
         ),

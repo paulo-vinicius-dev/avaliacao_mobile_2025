@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
-
-import 'package:avaliacao_mobile_2025/data/dummy_data.dart';
+import 'package:avaliacao_mobile_2025/models/genre.dart';
 import 'package:avaliacao_mobile_2025/widgets/genre_item.dart';
 
 class GenreScreen extends StatelessWidget {
-  const GenreScreen({super.key});
+  const GenreScreen({
+    super.key,
+    required this.genres,
+  });
+
+  final List<Genre> genres;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Gêneros"),
-      ),
-      body: GridView(
+    return GridView.builder(
+      itemCount: genres.length,
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 1,
+          crossAxisCount: 2,
           childAspectRatio: 3 / 2,
-          crossAxisSpacing: 15,
-          mainAxisSpacing: 15,
+          crossAxisSpacing: 5,
+          mainAxisSpacing: 10,
         ),
-        children: [
-          for (final genre in genres)
-            GenreItem(genre: genre),
-        ]
-      ),
-    );
+        itemBuilder: (context, index){
+          final genre = genres[index];
+          return GenreItem(
+              genre: genre,
+          );
+        }
+      );
   }
 }

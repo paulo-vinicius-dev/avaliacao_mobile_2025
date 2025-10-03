@@ -1,4 +1,4 @@
-class Reviews {
+class Reviews { //meio complicado pra desenvolver agora talvez
   const Reviews({
     required this.id,
     required this.gameId,
