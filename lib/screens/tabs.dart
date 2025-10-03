@@ -24,8 +24,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = MyGamesScreen(myGames: myGames);
-    var activePageTitle = 'Meus Jogos';
+    Widget activePage = MyGamesScreen(allGames: myGames);
+    var activePageTitle = 'Meus Jogos Favoritos';
     if (_selectedPageIndex == 1) {
       //definir cada tela da navibar
       activePage = GenreScreen(genres: genres, games: myGames);
