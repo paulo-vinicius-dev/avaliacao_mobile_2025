@@ -8,15 +8,15 @@ class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
 
   @override
-  ConsumerState<TabsScreen> createState(){
+  ConsumerState<TabsScreen> createState() {
     return _TabsScreenState();
   }
 }
 
-class _TabsScreenState extends ConsumerState<TabsScreen>{
+class _TabsScreenState extends ConsumerState<TabsScreen> {
   int _selectedPageIndex = 0;
 
-  void _selectPage(int index){
+  void _selectPage(int index) {
     setState(() {
       _selectedPageIndex = index;
     });
@@ -24,22 +24,16 @@ class _TabsScreenState extends ConsumerState<TabsScreen>{
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = MyGamesScreen(
-      myGames: myGames,
-    );
+    Widget activePage = MyGamesScreen(myGames: myGames);
     var activePageTitle = 'Meus Jogos';
-    if (_selectedPageIndex == 1) { //definir cada tela da navibar
-       activePage = GenreScreen(
-         genres: genres,
-       );
-       activePageTitle = 'Gêneros';
+    if (_selectedPageIndex == 1) {
+      //definir cada tela da navibar
+      activePage = GenreScreen(genres: genres, games: myGames);
+      activePageTitle = 'Gêneros';
     }
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text(activePageTitle),
-          centerTitle: true,
-        ),
+      appBar: AppBar(title: Text(activePageTitle), centerTitle: true),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
@@ -50,8 +44,8 @@ class _TabsScreenState extends ConsumerState<TabsScreen>{
             label: 'Meus Jogos',
           ),
           BottomNavigationBarItem(
-              icon: Icon(Icons.category_outlined),
-              label: 'Gêneros',
+            icon: Icon(Icons.category_outlined),
+            label: 'Gêneros',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.stacked_bar_chart),
@@ -63,13 +57,10 @@ class _TabsScreenState extends ConsumerState<TabsScreen>{
         child: ListView(
           padding: EdgeInsets.zero,
           children: [
-              ListTile(
-                leading: Icon(Icons.info_outline),
-                title: Text('Sobre'),
-              ),
-          ]
+            ListTile(leading: Icon(Icons.info_outline), title: Text('Sobre')),
+          ],
         ),
-      )
+      ),
     );
   }
 }
