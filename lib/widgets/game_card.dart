@@ -22,8 +22,6 @@ class GameCards extends StatelessWidget {
         return Colors.deepPurple;
       case gameStatus.Aposentado:
         return Colors.grey;
-      default:
-        return Colors.transparent;
     }
   }
 

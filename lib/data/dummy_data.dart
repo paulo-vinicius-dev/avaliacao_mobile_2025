@@ -33,7 +33,6 @@ const genres = [
     title: "Simulação",
     color: Colors.orange,
   ),
-  // Novos Gêneros Adicionados:
   Genre(
     id: 7,
     title: "Mundo Aberto",

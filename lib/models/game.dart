@@ -12,7 +12,7 @@ class Game {
     required this.imageUrl,
     required this.genres,
     required this.releaseDate,
-    required this.status,
+    this.status = gameStatus.DesejoIniciar,
     this.hoursPlayed = 0,
   });
 
