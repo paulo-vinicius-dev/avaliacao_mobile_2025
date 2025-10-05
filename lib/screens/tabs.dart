@@ -59,10 +59,12 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.gamepad_outlined),
             label: 'Meus Jogos',
+            activeIcon: Icon(Icons.gamepad),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.category_outlined),
             label: 'Gêneros',
+            activeIcon: Icon(Icons.category),
           ),
           /* Implementar essa tela no futuro
           BottomNavigationBarItem(
