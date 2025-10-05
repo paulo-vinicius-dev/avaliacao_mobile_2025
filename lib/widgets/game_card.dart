@@ -11,20 +11,6 @@ class GameCards extends StatelessWidget {
   final Game game;
   final void Function(Game game) onTap;//função atributo para seleção do jogo
 
-  // Função pra definir cor da borda de acordo com status
-  Color _getBorderColor(GameStatus status) {
-    switch (status) {
-      case GameStatus.jogando:
-        return Colors.deepOrange;
-      case GameStatus.concluido:
-        return Colors.lightGreen;
-      case GameStatus.desejoIniciar:
-        return Colors.deepPurple;
-      case GameStatus.aposentado:
-        return Colors.grey;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -36,7 +22,7 @@ class GameCards extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
           side: BorderSide(
-            color: _getBorderColor(game.status),
+            color: game.getStatusColor(game.status), // Cor ao redor do card para identificar o status
             width: 1,
           ),
         ),

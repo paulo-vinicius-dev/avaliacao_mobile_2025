@@ -22,7 +22,7 @@ class GamesListScreen extends ConsumerWidget {
     }).toList();
 
     return Scaffold(
-      appBar: AppBar(title: Text(genre.title), backgroundColor: genre.color),
+      appBar: AppBar(title: Text(genre.title), backgroundColor: genre.color.withValues(alpha: 0.8)),
       body: filteredGames.isEmpty
           ? Center(
               child: Column(

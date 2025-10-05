@@ -5,6 +5,7 @@ import 'package:avaliacao_mobile_2025/screens/my_games.dart';
 import 'package:avaliacao_mobile_2025/screens/genre_screen.dart';
 import 'package:avaliacao_mobile_2025/widgets/main_drawer.dart';
 import 'package:avaliacao_mobile_2025/screens/about.dart';
+import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -37,11 +38,13 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    Widget activePage = MyGamesScreen(allGames: myGames);
+    final games = ref.watch(gamesProvider);
+    
+    Widget activePage = MyGamesScreen(allGames: games);
     var activePageTitle = 'Meus Jogos';
     if (_selectedPageIndex == 1) {
       //define cada tela da navibar
-      activePage = GenreScreen(genres: genres, games: myGames);
+      activePage = GenreScreen(genres: genres, games: games);
       activePageTitle = 'Gêneros';
     }
 

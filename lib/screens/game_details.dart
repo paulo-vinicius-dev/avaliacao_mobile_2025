@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
-import 'package:avaliacao_mobile_2025/utils/format_date.dart';
+import 'package:avaliacao_mobile_2025/widgets/game_status_button.dart';
 
 class GameDetailsScreen extends StatelessWidget {
   final Game game;
@@ -15,6 +15,7 @@ class GameDetailsScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text(game.title),
+        backgroundColor: game.getStatusColor(game.status).withValues(alpha: 0.8),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -42,13 +43,18 @@ class GameDetailsScreen extends StatelessWidget {
                   const SizedBox(height: 8),
                   
                   Text(
-                    'Lançamento: ${formatDate(game.releaseDate)}',
+                    'Lançamento: ${game.getReleaseDateFormated()}',
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                       color: Colors.grey[400],
                     ),
                   ),
                   const SizedBox(height: 20),
                   
+                  if (game.isFavorite) ...[
+                    GameStatusButton(game: game),
+                    const SizedBox(height: 20),
+                  ],
+
                   if (game.platforms.isNotEmpty) ...[
                     Text(
                       'Plataformas',
