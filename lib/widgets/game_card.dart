@@ -12,18 +12,16 @@ class GameCards extends StatelessWidget {
   final void Function(Game game) onTap;//função atributo para seleção do jogo
 
   // Função pra definir cor da borda de acordo com status
-  Color _getBorderColor(gameStatus status) {
+  Color _getBorderColor(GameStatus status) {
     switch (status) {
-      case gameStatus.Jogando:
+      case GameStatus.jogando:
         return Colors.deepOrange;
-      case gameStatus.Concluido:
+      case GameStatus.concluido:
         return Colors.lightGreen;
-      case gameStatus.DesejoIniciar:
+      case GameStatus.desejoIniciar:
         return Colors.deepPurple;
-      case gameStatus.Aposentado:
+      case GameStatus.aposentado:
         return Colors.grey;
-      default:
-        return Colors.transparent;
     }
   }
 

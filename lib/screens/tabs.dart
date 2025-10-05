@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/data/dummy_data.dart';
 import 'package:avaliacao_mobile_2025/screens/my_games.dart';
 import 'package:avaliacao_mobile_2025/screens/genre_screen.dart';
+import 'package:avaliacao_mobile_2025/widgets/main_drawer.dart';
+import 'package:avaliacao_mobile_2025/screens/about.dart';
 
 class TabsScreen extends ConsumerStatefulWidget {
   const TabsScreen({super.key});
@@ -22,18 +24,30 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
     });
   }
 
+  void _setScreen(String identifier) async {
+    Navigator.of(context).pop();
+    if (identifier == 'sobre') {
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (ctx) => AboutScreen(),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     Widget activePage = MyGamesScreen(allGames: myGames);
-    var activePageTitle = 'Meus Jogos Favoritos';
+    var activePageTitle = 'Meus Jogos';
     if (_selectedPageIndex == 1) {
-      //definir cada tela da navibar
+      //define cada tela da navibar
       activePage = GenreScreen(genres: genres, games: myGames);
       activePageTitle = 'Gêneros';
     }
 
     return Scaffold(
       appBar: AppBar(title: Text(activePageTitle), centerTitle: true),
+      drawer: MainDrawer(onSelectedScreen: _setScreen),
       body: activePage,
       bottomNavigationBar: BottomNavigationBar(
         onTap: _selectPage,
@@ -47,20 +61,15 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
             icon: Icon(Icons.category_outlined),
             label: 'Gêneros',
           ),
+          /* Implementar essa tela no futuro
           BottomNavigationBarItem(
             icon: Icon(Icons.stacked_bar_chart),
             label: 'Estatísticas',
           ),
+          */
         ],
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: [
-            ListTile(leading: Icon(Icons.info_outline), title: Text('Sobre')),
-          ],
-        ),
       ),
     );
   }
 }
+

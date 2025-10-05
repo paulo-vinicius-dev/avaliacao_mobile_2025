@@ -1,8 +1,8 @@
-enum gameStatus {
-  Jogando,
-  Concluido,
-  DesejoIniciar,
-  Aposentado,
+enum GameStatus {
+  jogando,
+  concluido,
+  desejoIniciar,
+  aposentado,
 }
 
 class Game {
@@ -12,8 +12,10 @@ class Game {
     required this.imageUrl,
     required this.genres,
     required this.releaseDate,
-    required this.status,
+    this.status = GameStatus.desejoIniciar,
     this.hoursPlayed = 0,
+    this.platforms = const [],
+    this.synopsis = '',
   });
 
   final String id;
@@ -21,6 +23,8 @@ class Game {
   final String imageUrl;
   final List<int> genres;
   final DateTime releaseDate;
-  final gameStatus status;
+  final GameStatus status;
   final num hoursPlayed;
+  final List<String> platforms;
+  final String synopsis;
 }
