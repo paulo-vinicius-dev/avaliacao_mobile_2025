@@ -45,7 +45,7 @@ class AboutScreen extends StatelessWidget {
                   'https://images.steamusercontent.com/ugc/1879716425116025737/11723F2216821EB402732AD65E7F315EF7B7A98C/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false',
             ),
             BuildMemberCard(
-              name: 'Joâo Ryan de Aguiar Juriti',
+              name: 'João Ryan de Aguiar Juriti',
               imageUrl:
                   'https://images.steamusercontent.com/ugc/1879716425116025737/11723F2216821EB402732AD65E7F315EF7B7A98C/?imw=512&&ima=fit&impolicy=Letterbox&imcolor=%23000000&letterbox=false',
             ),
