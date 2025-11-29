@@ -1,15 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:avaliacao_mobile_2025/models/game.dart';
 import 'package:avaliacao_mobile_2025/models/genre.dart';
+import 'package:avaliacao_mobile_2025/screens/games_list_screen.dart';
 
 class GenreItem extends StatelessWidget {
-  const GenreItem({super.key, required this.genre});
+  const GenreItem({super.key, required this.genre, required this.games});
 
   final Genre genre;
+  final List<Game> games;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.of(context).push(
+          MaterialPageRoute(
+            builder: (ctx) => GamesListScreen(genre: genre, games: games),
+          ),
+        );
+      },
       splashColor: Theme.of(context).primaryColor,
       borderRadius: BorderRadius.circular(16),
       child: Container(
@@ -39,5 +48,6 @@ class GenreItem extends StatelessWidget {
         ),
       ),
     );
+
   }
 }

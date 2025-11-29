@@ -1,1 +1,0 @@
-//estatisticas gerais da conta, total de horas por genero de jogo ou coisa assim
