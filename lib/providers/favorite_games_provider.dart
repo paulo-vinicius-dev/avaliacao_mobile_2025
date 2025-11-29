@@ -1,14 +1,22 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/local_storage.dart';
 
 class FavoriteGamesNotifier extends Notifier<List<String>> {
+  final List<String> _initialFavorites;
+  final _storage = LocalStorage();
+
+  FavoriteGamesNotifier(this._initialFavorites);
+
   @override
   List<String> build() {
-    return [];
+    // Inicia com o que veio do disco
+    return _initialFavorites;
   }
 
   void toggleFavorite(String gameId) {
+
     if (state.contains(gameId)) {
       // Removi
       state = state.where((id) => id != gameId).toList();
@@ -22,6 +30,9 @@ class FavoriteGamesNotifier extends Notifier<List<String>> {
           .read(gamesProvider.notifier)
           .updateGameStatus(gameId, GameStatus.wishPlay, isFavorite: true);
     }
+
+    //Salvar favoritos no disco
+    _storage.saveFavorites(state);
   }
 
   bool isFavorite(String gameId) {
@@ -29,7 +40,8 @@ class FavoriteGamesNotifier extends Notifier<List<String>> {
   }
 }
 
+// Inicializa vazio, sobrescrito no main
 final favoriteGamesProvider =
-    NotifierProvider<FavoriteGamesNotifier, List<String>>(
-      FavoriteGamesNotifier.new,
-    );
+  NotifierProvider<FavoriteGamesNotifier, List<String>>(() {
+    return FavoriteGamesNotifier([]);
+});

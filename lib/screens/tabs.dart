@@ -64,7 +64,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
                 icon: Icon(
                   currentCols == 1
                       ? Icons.view_list
-                      : (currentCols == 2 ? Icons.grid_view : Icons.view_comfy),
+                      : (currentCols == 2 ? Icons.grid_view : Icons.grid_on_sharp),
                 ),
                 onPressed: () {
 
@@ -72,7 +72,7 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
                 },
                 tooltip: 'Alterar visualização',
               ),
-            const SizedBox(width: 8), // Espacinho extra
+            const SizedBox(width: 8),
           ],
       ),
       drawer: MainDrawer(onSelectedScreen: _setScreen),

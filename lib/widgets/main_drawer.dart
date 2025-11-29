@@ -62,7 +62,7 @@ class MainDrawer extends ConsumerWidget {
               'Modo Escuro',
               style: textTheme.titleSmall!.copyWith(
                 color: colors.onSurface,
-                fontSize: 18,
+                fontSize: 20,
               ),
             ),
             trailing: Switch(

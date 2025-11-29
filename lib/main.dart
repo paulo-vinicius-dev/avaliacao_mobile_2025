@@ -4,6 +4,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/screens/tabs.dart';
 import 'package:avaliacao_mobile_2025/providers/theme_provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:avaliacao_mobile_2025/providers/grid_layout_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/local_storage.dart';
+import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/favorite_games_provider.dart';
 
 const seedColor = Color.fromARGB(255, 31, 5, 76);
 final textTheme = GoogleFonts.robotoTextTheme();
@@ -37,8 +41,14 @@ final darkTheme = ThemeData(
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  final storage = LocalStorage();
+  final initialFavorites = await storage.readFavorites();
+  final initialStatuses = await storage.readStatuses();
+
   final prefs = await SharedPreferences.getInstance();
   final savedThemeString = prefs.getString('themeMode');
+
+  final savedColumns = prefs.getInt('gridLayout_columns') ?? 3;
 
   ThemeMode initialTheme = ThemeMode.system;
   if (savedThemeString != null) {
@@ -51,8 +61,19 @@ void main() async {
   runApp(
     ProviderScope(
       overrides: [
+        // Injeta a lista lida do arquivo no Provider
+        favoriteGamesProvider.overrideWith(() {
+          return FavoriteGamesNotifier(initialFavorites);
+        }),
+        gamesProvider.overrideWith(() {
+          return GamesNotifier(initialStatuses, initialFavorites);
+        }),
+        //Injeta a configuração salva no Provider
         themeProvider.overrideWith(() {
           return _InitializedThemeNotifier(initialTheme);
+        }),
+        gridLayoutProvider.overrideWith(() {
+          return GridLayoutNotifier(savedColumns);
         }),
       ],
       child: const MyApp(),

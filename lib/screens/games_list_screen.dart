@@ -14,8 +14,7 @@ class GamesListScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favoriteGames = ref.watch(favoriteGamesProvider);
-    final favoriteNotifier = ref.read(favoriteGamesProvider.notifier);
+    final favoriteGamesIds = ref.watch(favoriteGamesProvider);
     final colorScheme = Theme.of(context).colorScheme;
 
     final filteredGames = games.where((game) {
@@ -65,7 +64,7 @@ class GamesListScreen extends ConsumerWidget {
         itemCount: filteredGames.length,
         itemBuilder: (context, index) {
           final game = filteredGames[index];
-          final isFavorite = favoriteGames.contains(game.id);
+          final isFavorite = favoriteGamesIds.contains(game.id);
 
           return Stack(
             children: [
@@ -93,7 +92,9 @@ class GamesListScreen extends ConsumerWidget {
                       color: isFavorite ? Colors.red : Colors.white,
                     ),
                     onPressed: () {
-                      favoriteNotifier.toggleFavorite(game.id);
+                      ref
+                          .read(favoriteGamesProvider.notifier)
+                          .toggleFavorite(game.id);
 
                       ScaffoldMessenger.of(context).clearSnackBars();
                       ScaffoldMessenger.of(context).showSnackBar(
