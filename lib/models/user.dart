@@ -3,8 +3,8 @@ class User {
     : favoriteGamesIds = favoriteGamesIds ?? [];
 
   final String id;
-  final String name;
-  final List<String> favoriteGamesIds;
+  String name;
+  List<String> favoriteGamesIds;
 
   bool isFavorite(String gameId) {
     return favoriteGamesIds.contains(gameId);

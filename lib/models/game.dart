@@ -1,15 +1,9 @@
 import 'package:flutter/material.dart';
 
-enum GameStatus {
-  notStarted,
-  playing,
-  concluded,
-  wishPlay,
-  dropped,
-}
+enum GameStatus { notStarted, playing, concluded, wishPlay, dropped }
 
 class Game {
-  const Game({
+  Game({
     required this.id,
     required this.title,
     required this.imageUrl,
@@ -27,9 +21,9 @@ class Game {
   final String imageUrl;
   final List<int> genres;
   final DateTime releaseDate;
-  final GameStatus status;
-  final bool isFavorite;
-  final num hoursPlayed;
+  GameStatus status;
+  bool isFavorite;
+  num hoursPlayed;
   final List<String> platforms;
   final String synopsis;
 
@@ -42,7 +36,7 @@ class Game {
       case GameStatus.concluded:
         return Colors.green;
       case GameStatus.wishPlay:
-        return Colors.yellow;
+        return Colors.deepPurple;
       case GameStatus.dropped:
         return Colors.red;
     }

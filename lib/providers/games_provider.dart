@@ -8,7 +8,11 @@ class GamesNotifier extends Notifier<List<Game>> {
     return myGames;
   }
 
-  void updateGameStatus(String gameId, GameStatus newStatus, {bool isFavorite = true}) {
+  void updateGameStatus(
+    String gameId,
+    GameStatus newStatus, {
+    bool isFavorite = true,
+  }) {
     state = [
       for (final game in state)
         if (game.id == gameId)

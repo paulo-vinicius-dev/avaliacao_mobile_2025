@@ -1,12 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:avaliacao_mobile_2025/providers/theme_provider.dart';
 
-class MainDrawer extends StatelessWidget {
+class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key, required this.onSelectedScreen});
 
-  final void Function (String identifier) onSelectedScreen;
+  final void Function(String identifier) onSelectedScreen;
 
   @override
-  Widget build(BuildContext context) {
+
+  Widget build(BuildContext context, WidgetRef ref) {
+    final currentTheme = ref.watch(themeProvider);
+    final isDark = currentTheme == ThemeMode.dark;
+
+    final colors = Theme.of(context).colorScheme;
+    final textTheme = Theme.of(context).textTheme;
+
     return Drawer(
       child: Column(
         children: [
@@ -15,11 +24,8 @@ class MainDrawer extends StatelessWidget {
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [
-                  Theme.of(context).colorScheme.primaryContainer,
-                  Theme.of(context)
-                      .colorScheme
-                      .primaryContainer
-                      .withValues(alpha: 0.8),
+                  colors.primaryContainer,
+                  colors.primaryContainer.withValues(alpha: 0.8)
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -30,20 +36,45 @@ class MainDrawer extends StatelessWidget {
                 Icon(
                   Icons.videogame_asset_rounded,
                   size: 48,
-                  color: Theme.of(context).colorScheme.primary,
+                  color: colors.onPrimaryContainer,
                 ),
                 const SizedBox(width: 15),
                 Text(
                   'PlayLegacy',
-                  style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                    color: Colors.white70,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge!.copyWith(
+                      color: colors.onPrimaryContainer,
+                      fontWeight: FontWeight.bold
                   ),
                 ),
               ],
             ),
           ),
           ListTile(
-            tileColor: const Color.fromARGB(47, 92, 67, 154),
+            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
+            leading: Icon(
+              isDark ? Icons.light_mode : Icons.dark_mode,
+              size: 26,
+              color: colors.onSurface,
+            ),
+            title: Text(
+              'Modo Escuro',
+              style: textTheme.titleSmall!.copyWith(
+                color: colors.onSurface,
+                fontSize: 18,
+              ),
+            ),
+            trailing: Switch(
+              value: isDark,
+              onChanged: (value) {
+                ref.read(themeProvider.notifier).toggleTheme();
+              },
+            ),
+          ),
+          SizedBox(height: 10),
+          ListTile(
+            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
             leading: Icon(
               Icons.info_outline,
               size: 26,
@@ -60,6 +91,7 @@ class MainDrawer extends StatelessWidget {
               onSelectedScreen('sobre');
             },
           ),
+          SizedBox(height: 10),
         ],
       ),
     );

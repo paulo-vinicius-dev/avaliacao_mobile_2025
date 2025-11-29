@@ -1,5 +1,5 @@
 class Reviews {
-  const Reviews({
+  Reviews({
     required this.id,
     required this.gameId,
     required this.rating,
@@ -8,6 +8,6 @@ class Reviews {
 
   final int id;
   final int gameId;
-  final int rating;
-  final String comment;
+  int rating;
+  String comment;
 }

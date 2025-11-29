@@ -24,5 +24,6 @@ class GenreScreen extends StatelessWidget {
         return GenreItem(genre: genre, games: games);
       },
     );
+
   }
 }

@@ -4,10 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
 
 class GameStatusButton extends ConsumerWidget {
-  const GameStatusButton({
-    super.key,
-    required this.game
-  });
+  const GameStatusButton({super.key, required this.game});
 
   final models.Game game;
 
@@ -27,7 +24,7 @@ class GameStatusButton extends ConsumerWidget {
       case models.GameStatus.concluded:
         return Colors.green;
       case models.GameStatus.wishPlay:
-        return Colors.yellow;
+        return Colors.yellow.shade800; // Shade ajustado para visibilidade no tema claro
       case models.GameStatus.dropped:
         return Colors.red;
     }
@@ -50,24 +47,32 @@ class GameStatusButton extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Wrap(
       spacing: 8,
       runSpacing: 8,
       children: availableStatuses.map((status) {
         final isCurrentStatus = game.status == status;
         final statusColor = _getStatusColor(status);
-        final displayColor = isCurrentStatus 
-            ? statusColor 
+        final displayColor = isCurrentStatus
+            ? statusColor
             : statusColor.withValues(alpha: 0.3);
 
         return GestureDetector(
-          onTap: isCurrentStatus ? null : () {
-            ref.read(gamesProvider.notifier).updateGameStatus(game.id, status);
-            
+          onTap: isCurrentStatus
+              ? null
+              : () {
+            ref
+                .read(gamesProvider.notifier)
+                .updateGameStatus(game.id, status);
+
             ScaffoldMessenger.of(context).clearSnackBars();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text('Status alterado para: ${_getStatusDescription(status)}'),
+                content: Text(
+                  'Status alterado para: ${_getStatusDescription(status)}',
+                ),
                 duration: const Duration(seconds: 2),
               ),
             );
@@ -85,8 +90,10 @@ class GameStatusButton extends ConsumerWidget {
             child: Text(
               _getStatusDescription(status),
               style: TextStyle(
-                color: isCurrentStatus ? Colors.white : Colors.grey[400],
-                fontWeight: isCurrentStatus ? FontWeight.bold : FontWeight.normal,
+                color: isCurrentStatus ? colorScheme.onSurface : colorScheme.onSurfaceVariant,
+                fontWeight: isCurrentStatus
+                    ? FontWeight.bold
+                    : FontWeight.normal,
               ),
             ),
           ),

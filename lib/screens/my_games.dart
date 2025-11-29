@@ -4,6 +4,7 @@ import 'package:avaliacao_mobile_2025/widgets/game_card.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 import 'package:avaliacao_mobile_2025/screens/game_details.dart';
 import 'package:avaliacao_mobile_2025/providers/favorite_games_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/grid_layout_provider.dart';
 
 class MyGamesScreen extends ConsumerWidget {
   const MyGamesScreen({super.key, required this.allGames});
@@ -19,6 +20,8 @@ class MyGamesScreen extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final favoriteGamesIds = ref.watch(favoriteGamesProvider);
+
+    final axisCount = ref.watch(gridLayoutProvider);
 
     final favoriteGames = allGames.where((game) {
       return favoriteGamesIds.contains(game.id);
@@ -53,11 +56,11 @@ class MyGamesScreen extends ConsumerWidget {
     return GridView.builder(
       padding: const EdgeInsets.all(12.0),
       itemCount: favoriteGames.length,
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 3, // 3 colunas
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: axisCount,
         crossAxisSpacing: 8,
         mainAxisSpacing: 8,
-        childAspectRatio: 0.7,
+        childAspectRatio: axisCount == 1 ? 2 : 0.7,
       ),
       itemBuilder: (context, index) {
         final game = favoriteGames[index];
@@ -69,5 +72,6 @@ class MyGamesScreen extends ConsumerWidget {
         );
       },
     );
+
   }
 }

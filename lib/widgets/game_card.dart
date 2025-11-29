@@ -2,28 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 
 class GameCards extends StatelessWidget {
-  const GameCards({
-    super.key,
-    required this.game,
-    required this.onTap,
-  });
+  const GameCards({super.key, required this.game, required this.onTap});
 
   final Game game;
-  final void Function(Game game) onTap;//função atributo para seleção do jogo
+  final void Function(Game game) onTap;
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return InkWell(
-      onTap: (){
+      onTap: () {
         onTap(game);
       },
       child: Card(
         elevation: 4,
+        color: colorScheme.surfaceContainer,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(bottom: Radius.circular(10)),
+          borderRadius: const BorderRadius.vertical(bottom: Radius.circular(12)),
           side: BorderSide(
-            color: game.getStatusColor(game.status), // Cor ao redor do card para identificar o status
-            width: 1,
+            color: game.getStatusColor(
+              game.status,
+            ),
+            width: 2,
           ),
         ),
         clipBehavior: Clip.antiAlias,
@@ -34,16 +35,18 @@ class GameCards extends StatelessWidget {
                 game.imageUrl,
                 fit: BoxFit.cover,
                 width: double.infinity,
-                errorBuilder: (context, error, stackTrace) { //exibe icone caso imagem n esteja dosponivel
-                  return const Center(
-                    child: Icon(Icons.broken_image, size: 40, color: Colors.grey),
+                errorBuilder: (context, error, stackTrace) {
+                  return Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      size: 40,
+                      color: colorScheme.onSurfaceVariant,
+                    ),
                   );
                 },
                 loadingBuilder: (context, child, loadingProgress) {
                   if (loadingProgress == null) return child;
-                  return const Center(
-                    child: CircularProgressIndicator(),
-                  );
+                  return const Center(child: CircularProgressIndicator());
                 },
               ),
             ),
@@ -51,8 +54,8 @@ class GameCards extends StatelessWidget {
               padding: const EdgeInsets.all(8.0),
               child: Text(
                 game.title,
-                style: const TextStyle(
-                  color: Colors.white,
+                style: TextStyle(
+                  color: colorScheme.onSurface,
                   fontWeight: FontWeight.normal,
                   overflow: TextOverflow.ellipsis,
                 ),
