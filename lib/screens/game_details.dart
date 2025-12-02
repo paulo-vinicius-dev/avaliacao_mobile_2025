@@ -1,28 +1,42 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 import 'package:avaliacao_mobile_2025/widgets/game_status_button.dart';
+import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
 
-class GameDetailsScreen extends StatelessWidget {
+class GameDetailsScreen extends ConsumerStatefulWidget {
   final Game game;
 
   const GameDetailsScreen({super.key, required this.game});
 
   @override
+  ConsumerState<GameDetailsScreen> createState() => _GameDetailsScreenState();
+}
+
+class _GameDetailsScreenState extends ConsumerState<GameDetailsScreen> {
+  @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    
+    // Observa mudanças no estado do jogo
+    final games = ref.watch(gamesProvider);
+    final currentGame = games.firstWhere(
+      (g) => g.id == widget.game.id,
+      orElse: () => widget.game,
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(game.title),
-        backgroundColor: game.getStatusColor(game.status).withValues(alpha: 0.8),
+        title: Text(currentGame.title),
+        backgroundColor: currentGame.getStatusColor(currentGame.status).withValues(alpha: 0.8),
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.network(
-              game.imageUrl,
+              currentGame.imageUrl,
               width: double.infinity,
               height: 300,
               fit: BoxFit.cover,
@@ -33,7 +47,7 @@ class GameDetailsScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    game.title,
+                    currentGame.title,
                     style: textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       color: colorScheme.onSurface,
@@ -41,17 +55,17 @@ class GameDetailsScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Lançamento: ${game.getReleaseDateFormated()}',
+                    'Lançamento: ${currentGame.getReleaseDateFormated()}',
                     style: textTheme.bodyMedium?.copyWith(
                       color: colorScheme.onSurfaceVariant,
                     ),
                   ),
                   const SizedBox(height: 20),
-                  if (game.isFavorite) ...[
-                    GameStatusButton(game: game),
+                  if (currentGame.isFavorite) ...[
+                    GameStatusButton(game: currentGame),
                     const SizedBox(height: 20),
                   ],
-                  if (game.platforms.isNotEmpty) ...[
+                  if (currentGame.platforms.isNotEmpty) ...[
                     Text(
                       'Plataformas',
                       style: textTheme.titleLarge?.copyWith(
@@ -63,7 +77,7 @@ class GameDetailsScreen extends StatelessWidget {
                     Wrap(
                       spacing: 8,
                       runSpacing: 8,
-                      children: game.platforms.map((platform) {
+                      children: currentGame.platforms.map((platform) {
                         return Chip(
                           label: Text(platform),
                           backgroundColor: colorScheme.primaryContainer,
@@ -76,7 +90,7 @@ class GameDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
                   ],
-                  if (game.synopsis.isNotEmpty) ...[
+                  if (currentGame.synopsis.isNotEmpty) ...[
                     Text(
                       'Sinopse',
                       style: textTheme.titleLarge?.copyWith(
@@ -86,7 +100,7 @@ class GameDetailsScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      game.synopsis,
+                      currentGame.synopsis,
                       style: textTheme.bodyLarge?.copyWith(
                         color: colorScheme.onSurface,
                         height: 1.5,

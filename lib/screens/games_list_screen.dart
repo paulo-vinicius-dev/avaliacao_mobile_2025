@@ -5,26 +5,33 @@ import 'package:avaliacao_mobile_2025/models/genre.dart';
 import 'package:avaliacao_mobile_2025/widgets/game_card.dart';
 import 'package:avaliacao_mobile_2025/screens/game_details.dart';
 import 'package:avaliacao_mobile_2025/providers/favorite_games_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
 
-class GamesListScreen extends ConsumerWidget {
+class GamesListScreen extends ConsumerStatefulWidget {
   const GamesListScreen({super.key, required this.genre, required this.games});
 
   final Genre genre;
   final List<Game> games;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<GamesListScreen> createState() => _GamesListScreenState();
+}
+
+class _GamesListScreenState extends ConsumerState<GamesListScreen> {
+  @override
+  Widget build(BuildContext context) {
     final favoriteGamesIds = ref.watch(favoriteGamesProvider);
+    final allGames = ref.watch(gamesProvider);
     final colorScheme = Theme.of(context).colorScheme;
 
-    final filteredGames = games.where((game) {
-      return game.genres.contains(genre.id);
+    final filteredGames = allGames.where((game) {
+      return game.genres.contains(widget.genre.id);
     }).toList();
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(genre.title),
-        backgroundColor: genre.color.withValues(alpha: 0.8),
+        title: Text(widget.genre.title),
+        backgroundColor: widget.genre.color.withValues(alpha: 0.8),
       ),
       body: filteredGames.isEmpty
           ? Center(
@@ -45,7 +52,7 @@ class GamesListScreen extends ConsumerWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              'Não há jogos do gênero ${genre.title}',
+              'Não há jogos do gênero ${widget.genre.title}',
               style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                 color: colorScheme.onSurfaceVariant,
               ),
