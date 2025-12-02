@@ -64,11 +64,43 @@ class MyGamesScreen extends ConsumerWidget {
       ),
       itemBuilder: (context, index) {
         final game = favoriteGames[index];
-        return GameCards(
-          game: game,
-          onTap: (game) {
-            showGameDetails(context, game);
-          },
+        return Stack(
+          children: [
+            GameCards(
+              game: game,
+              onTap: (game) {
+                showGameDetails(context, game);
+              },
+            ),
+            Positioned(
+              top: 8,
+              right: 8,
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.black.withValues(alpha: 0.6),
+                  shape: BoxShape.circle,
+                ),
+                child: IconButton(
+                  icon: Icon(
+                    Icons.favorite,
+                    color: Colors.red,
+                  ),
+                  tooltip: 'Remover dos favoritos',
+                  onPressed: () {
+                    ref.read(favoriteGamesProvider.notifier).toggleFavorite(game.id);
+
+                    ScaffoldMessenger.of(context).clearSnackBars();
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text('${game.title} removido dos favoritos'),
+                        duration: const Duration(seconds: 2),
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ),
+          ],
         );
       },
     );

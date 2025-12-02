@@ -44,10 +44,13 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 
       if (!success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Usuário ou senha inválidos'),
+          SnackBar(
+            content: Text(
+              'Usuário ou senha inválidos',
+              style: TextStyle(color: Colors.white),
+            ),
             backgroundColor: Colors.red,
-            duration: Duration(seconds: 3),
+            duration: const Duration(seconds: 3),
           ),
         );
       }
@@ -58,23 +61,26 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+    final brightness = Theme.of(context).brightness;
+    final isDark = brightness == Brightness.dark;
 
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [
-              colorScheme.primaryContainer,
-              colorScheme.secondaryContainer,
-            ],
+          image: DecorationImage(
+            image: const AssetImage('assets/images/login-background.png'),
+            fit: BoxFit.cover,
+            colorFilter: ColorFilter.mode(
+              isDark ? Colors.black.withValues(alpha: 0.5) : Colors.black.withValues(alpha: 0.2),
+              BlendMode.darken,
+            ),
           ),
         ),
         child: Center(
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Card(
+              color: colorScheme.surface.withOpacity(0.95),
               elevation: 8,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -101,7 +107,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Faça login para continuar',
+                        'Bem-vindo! realize o login para continuar.',
                         style: textTheme.bodyLarge?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
@@ -165,6 +171,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                         child: ElevatedButton(
                           onPressed: _isLoading ? null : _handleLogin,
                           style: ElevatedButton.styleFrom(
+                            backgroundColor: colorScheme.primary,
+                            foregroundColor: colorScheme.onPrimary,
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12),
                             ),
@@ -183,14 +191,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ),
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Usuários de teste: paulo/elder',
-                        style: textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                          fontStyle: FontStyle.italic,
-                        ),
-                      ),
+
                     ],
                   ),
                 ),

@@ -4,9 +4,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 
 class LocalStorage {
+  final String? username;
+  
+  LocalStorage({this.username});
+
+  String get _userPrefix => username != null ? '${username}_' : '';
+
   Future<File> get _favoritesFile async {
     final dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/favorites.json');
+    return File('${dir.path}/${_userPrefix}favorites.json');
   }
 
   Future<List<String>> readFavorites() async {
@@ -27,7 +33,7 @@ class LocalStorage {
 
   Future<File> get _statusFile async {
     final dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/statuses.json');
+    return File('${dir.path}/${_userPrefix}statuses.json');
   }
 
   Future<Map<String, GameStatus>> readStatuses() async {

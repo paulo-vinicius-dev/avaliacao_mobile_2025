@@ -1,5 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:avaliacao_mobile_2025/providers/theme_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/grid_layout_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/favorite_games_provider.dart';
 
 class AuthState {
   final bool isAuthenticated;
@@ -31,13 +35,24 @@ class AuthNotifier extends Notifier<AuthState> {
     return AuthState.unauthenticated();
   }
 
+  Future<void> _loadUserPreferences(String username) async {
+    // Carregar preferências do usuário
+    await ref.read(themeProvider.notifier).loadUserTheme(username);
+    await ref.read(gridLayoutProvider.notifier).loadUserLayout(username);
+    await ref.read(favoriteGamesProvider.notifier).loadUserFavorites(username);
+    await ref.read(gamesProvider.notifier).loadUserGames(username);
+  }
+
   Future<bool> login(String username, String password) async {
     if (_validUsers[username] == password) {
-      state = AuthState.authenticated(username);
-      
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(_authKey, true);
       await prefs.setString(_usernameKey, username);
+      
+      // Carregar preferências do usuário antes de atualizar o estado
+      await _loadUserPreferences(username);
+      
+      state = AuthState.authenticated(username);
       
       return true;
     }
@@ -49,6 +64,9 @@ class AuthNotifier extends Notifier<AuthState> {
     await prefs.remove(_authKey);
     await prefs.remove(_usernameKey);
     
+    // Limpar favoritos ao fazer logout
+    ref.read(favoriteGamesProvider.notifier).clearFavorites();
+    
     state = AuthState.unauthenticated();
   }
 
@@ -58,6 +76,8 @@ class AuthNotifier extends Notifier<AuthState> {
     final username = prefs.getString(_usernameKey);
 
     if (isAuth && username != null) {
+      // Carregar preferências do usuário
+      await _loadUserPreferences(username);
       state = AuthState.authenticated(username);
     } else {
       state = AuthState.unauthenticated();

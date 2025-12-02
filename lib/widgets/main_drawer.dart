@@ -14,35 +14,50 @@ class MainDrawer extends ConsumerWidget {
     final isDark = currentTheme == ThemeMode.dark;
     final authState = ref.watch(authProvider);
     
-    // Capturar o notifier antes de qualquer navegação
     final authNotifier = ref.read(authProvider.notifier);
 
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
 
     Future<void> handleLogout() async {
-      Navigator.of(context).pop(); // Fecha o drawer primeiro
+      Navigator.of(context).pop();
       
       final confirmed = await showDialog<bool>(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Deseja realmente sair da sua conta?'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text('Cancelar'),
+        builder: (ctx) {
+          final dialogColors = Theme.of(ctx).colorScheme;
+          return AlertDialog(
+            backgroundColor: dialogColors.surface,
+            title: Text(
+              'Logout',
+              style: TextStyle(color: dialogColors.onSurface),
             ),
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: const Text('Confirmar'),
+            content: Text(
+              'Deseja realmente sair da sua conta?',
+              style: TextStyle(color: dialogColors.onSurface),
             ),
-          ],
-        ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(
+                  'Cancelar',
+                  style: TextStyle(color: dialogColors.primary),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(
+                  'Confirmar',
+                  style: TextStyle(color: dialogColors.error),
+                ),
+              ),
+            ],
+          );
+        },
       );
 
       if (confirmed == true) {
-        await authNotifier.logout(); // Usa o notifier já capturado
+        await authNotifier.logout();
       }
     }
 
