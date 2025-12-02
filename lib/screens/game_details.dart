@@ -19,7 +19,6 @@ class _GameDetailsScreenState extends ConsumerState<GameDetailsScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     
-    // Observa mudanças no estado do jogo
     final games = ref.watch(gamesProvider);
     final currentGame = games.firstWhere(
       (g) => g.id == widget.game.id,

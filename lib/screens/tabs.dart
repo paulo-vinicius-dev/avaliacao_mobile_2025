@@ -58,7 +58,6 @@ class _TabsScreenState extends ConsumerState<TabsScreen> {
           title: Text(activePageTitle),
           centerTitle: true,
           actions: [
-            // Só mostra o botão se estiver na tela de Meus Jogos
             if (showLayoutAction)
               IconButton(
                 icon: Icon(

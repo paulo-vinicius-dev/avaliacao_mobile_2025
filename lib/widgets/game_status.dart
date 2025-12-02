@@ -24,7 +24,7 @@ class GameStatusButton extends ConsumerWidget {
       case models.GameStatus.concluded:
         return Colors.green;
       case models.GameStatus.wishPlay:
-        return Colors.yellow.shade800; // Shade ajustado para visibilidade no tema claro
+        return Colors.yellow.shade800;
       case models.GameStatus.dropped:
         return Colors.red;
     }

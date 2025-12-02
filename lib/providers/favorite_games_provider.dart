@@ -11,27 +11,23 @@ class FavoriteGamesNotifier extends Notifier<List<String>> {
 
   @override
   List<String> build() {
-    // Inicia com o que veio do disco
     return _initialFavorites;
   }
 
   void toggleFavorite(String gameId) {
 
     if (state.contains(gameId)) {
-      // Removi
       state = state.where((id) => id != gameId).toList();
       ref
           .read(gamesProvider.notifier)
           .updateGameStatus(gameId, GameStatus.notStarted, isFavorite: false);
     } else {
-      // Adiciona
       state = [...state, gameId];
       ref
           .read(gamesProvider.notifier)
           .updateGameStatus(gameId, GameStatus.wishPlay, isFavorite: true);
     }
 
-    //Salvar favoritos no disco
     _storage.saveFavorites(state);
   }
 
@@ -40,7 +36,6 @@ class FavoriteGamesNotifier extends Notifier<List<String>> {
   }
 }
 
-// Inicializa vazio, sobrescrito no main
 final favoriteGamesProvider =
   NotifierProvider<FavoriteGamesNotifier, List<String>>(() {
     return FavoriteGamesNotifier([]);

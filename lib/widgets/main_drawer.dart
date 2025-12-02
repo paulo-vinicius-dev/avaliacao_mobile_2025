@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/providers/theme_provider.dart';
+import 'package:avaliacao_mobile_2025/providers/auth_provider.dart';
 
 class MainDrawer extends ConsumerWidget {
   const MainDrawer({super.key, required this.onSelectedScreen});
@@ -8,13 +9,42 @@ class MainDrawer extends ConsumerWidget {
   final void Function(String identifier) onSelectedScreen;
 
   @override
-
   Widget build(BuildContext context, WidgetRef ref) {
     final currentTheme = ref.watch(themeProvider);
     final isDark = currentTheme == ThemeMode.dark;
+    final authState = ref.watch(authProvider);
+    
+    // Capturar o notifier antes de qualquer navegação
+    final authNotifier = ref.read(authProvider.notifier);
 
     final colors = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
+
+    Future<void> handleLogout() async {
+      Navigator.of(context).pop(); // Fecha o drawer primeiro
+      
+      final confirmed = await showDialog<bool>(
+        context: context,
+        builder: (ctx) => AlertDialog(
+          title: const Text('Logout'),
+          content: const Text('Deseja realmente sair da sua conta?'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: const Text('Cancelar'),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: const Text('Confirmar'),
+            ),
+          ],
+        ),
+      );
+
+      if (confirmed == true) {
+        await authNotifier.logout(); // Usa o notifier já capturado
+      }
+    }
 
     return Drawer(
       child: Column(
@@ -39,13 +69,29 @@ class MainDrawer extends ConsumerWidget {
                   color: colors.onPrimaryContainer,
                 ),
                 const SizedBox(width: 15),
-                Text(
-                  'PlayLegacy',
-                  style: Theme.of(
-                    context,
-                  ).textTheme.titleLarge!.copyWith(
-                      color: colors.onPrimaryContainer,
-                      fontWeight: FontWeight.bold
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        'PlayLegacy',
+                        style: Theme.of(
+                          context,
+                        ).textTheme.titleLarge!.copyWith(
+                            color: colors.onPrimaryContainer,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      if (authState.username != null) ...[
+                        const SizedBox(height: 4),
+                        Text(
+                          'Olá, ${authState.username}!',
+                          style: textTheme.bodyMedium?.copyWith(
+                            color: colors.onPrimaryContainer,
+                          ),
+                        ),
+                      ],
+                    ],
                   ),
                 ),
               ],
@@ -72,7 +118,7 @@ class MainDrawer extends ConsumerWidget {
               },
             ),
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           ListTile(
             tileColor: colors.primaryContainer.withValues(alpha: 0.8),
             leading: Icon(
@@ -83,15 +129,31 @@ class MainDrawer extends ConsumerWidget {
             title: Text(
               'Sobre',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
-                fontSize: 24,
-              ),
+                    color: Theme.of(context).colorScheme.onSurface,
+                    fontSize: 24,
+                  ),
             ),
             onTap: () {
               onSelectedScreen('sobre');
             },
           ),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
+          ListTile(
+            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
+            leading: Icon(
+              Icons.logout,
+              size: 26,
+              color: colors.error,
+            ),
+            title: Text(
+              'Logout',
+              style: textTheme.titleSmall!.copyWith(
+                color: colors.error,
+                fontSize: 24,
+              ),
+            ),
+            onTap: handleLogout,
+          ),
         ],
       ),
     );

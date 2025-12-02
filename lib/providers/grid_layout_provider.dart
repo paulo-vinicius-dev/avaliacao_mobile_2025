@@ -1,10 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-// Chave para salvar
 const _gridKey = 'gridLayout_columns';
 
-//provider que guarda um número inteiro (quantidade de colunas)
 final gridLayoutProvider = NotifierProvider<GridLayoutNotifier, int>(() {
   return GridLayoutNotifier(3);
 });
@@ -15,7 +13,7 @@ class GridLayoutNotifier extends Notifier<int> {
 
   @override
   int build() {
-    return _initialColumns;//Inicia com o valor que veio do disco
+    return _initialColumns;
   }
 
   void toggleColumns()  async {
@@ -26,8 +24,8 @@ class GridLayoutNotifier extends Notifier<int> {
     } else {
       newState = state + 1;
     }
-    state = newState; //atualiza tela
-    //salva no disco
+    state = newState; 
+    
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt(_gridKey, newState);
   }

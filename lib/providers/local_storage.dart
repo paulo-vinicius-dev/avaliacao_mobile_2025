@@ -4,7 +4,6 @@ import 'package:path_provider/path_provider.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 
 class LocalStorage {
-  //  FAVORITOS (Lista de IDs)
   Future<File> get _favoritesFile async {
     final dir = await getApplicationDocumentsDirectory();
     return File('${dir.path}/favorites.json');
@@ -26,7 +25,6 @@ class LocalStorage {
     await file.writeAsString(jsonEncode(ids));
   }
 
-  // STATUS (Mapa de ID -> Status)
   Future<File> get _statusFile async {
     final dir = await getApplicationDocumentsDirectory();
     return File('${dir.path}/statuses.json');
@@ -39,7 +37,6 @@ class LocalStorage {
       final content = await file.readAsString();
       final Map<String, dynamic> json = jsonDecode(content);
 
-      // Converte String para Enum
       final Map<String, GameStatus> result = {};
       json.forEach((key, value) {
         result[key] = GameStatus.values.firstWhere(
@@ -56,7 +53,6 @@ class LocalStorage {
   Future<void> saveStatuses(Map<String, GameStatus> statuses) async {
     final file = await _statusFile;
     final Map<String, String> json = {};
-    // Converte Enum para String
     statuses.forEach((key, value) {
       if (value != GameStatus.notStarted) json[key] = value.name;
     });
