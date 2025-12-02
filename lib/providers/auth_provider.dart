@@ -36,7 +36,6 @@ class AuthNotifier extends Notifier<AuthState> {
   }
 
   Future<void> _loadUserPreferences(String username) async {
-    // Carregar preferências do usuário
     await ref.read(themeProvider.notifier).loadUserTheme(username);
     await ref.read(gridLayoutProvider.notifier).loadUserLayout(username);
     await ref.read(favoriteGamesProvider.notifier).loadUserFavorites(username);
@@ -49,7 +48,6 @@ class AuthNotifier extends Notifier<AuthState> {
       await prefs.setBool(_authKey, true);
       await prefs.setString(_usernameKey, username);
       
-      // Carregar preferências do usuário antes de atualizar o estado
       await _loadUserPreferences(username);
       
       state = AuthState.authenticated(username);
@@ -64,7 +62,6 @@ class AuthNotifier extends Notifier<AuthState> {
     await prefs.remove(_authKey);
     await prefs.remove(_usernameKey);
     
-    // Limpar favoritos ao fazer logout
     ref.read(favoriteGamesProvider.notifier).clearFavorites();
     
     state = AuthState.unauthenticated();
@@ -76,7 +73,6 @@ class AuthNotifier extends Notifier<AuthState> {
     final username = prefs.getString(_usernameKey);
 
     if (isAuth && username != null) {
-      // Carregar preferências do usuário
       await _loadUserPreferences(username);
       state = AuthState.authenticated(username);
     } else {
