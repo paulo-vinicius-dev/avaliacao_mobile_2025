@@ -11,7 +11,7 @@ class FavoriteGamesNotifier extends Notifier<List<String>> {
 
   @override
   List<String> build() {
-    return _initialFavorites;
+     return _initialFavorites;
   }
 
   void setUsername(String? username) {
