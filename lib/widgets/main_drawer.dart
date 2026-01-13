@@ -72,7 +72,7 @@ class MainDrawer extends ConsumerWidget {
               gradient: LinearGradient(
                 colors: [
                   colors.primaryContainer,
-                  colors.primaryContainer.withOpacity(0.8)
+                  colors.primaryContainer.withValues(alpha: 0.8)
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -125,7 +125,7 @@ class MainDrawer extends ConsumerWidget {
             ),
           ),
           ListTile(
-            tileColor: colors.primaryContainer.withOpacity(0.8),
+            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
             leading: Icon(
               isDark ? Icons.light_mode : Icons.dark_mode,
               size: 26,
@@ -147,7 +147,7 @@ class MainDrawer extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
           ListTile(
-            tileColor: colors.primaryContainer.withOpacity(0.8),
+            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
             leading: Icon(
               Icons.info_outline,
               size: 26,
@@ -166,7 +166,7 @@ class MainDrawer extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
           ListTile(
-            tileColor: colors.primaryContainer.withOpacity(0.8),
+            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
             leading: Icon(
               Icons.logout,
               size: 26,
