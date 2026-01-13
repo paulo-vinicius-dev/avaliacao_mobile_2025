@@ -72,7 +72,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
             image: const AssetImage('assets/images/login-background.png'),
             fit: BoxFit.cover,
             colorFilter: ColorFilter.mode(
-              isDark ? Colors.black.withOpacity(0.5) : Colors.black.withOpacity(0.2),
+              isDark ? Colors.black.withValues(alpha: 0.5) : Colors.black.withValues(alpha: 0.2),
               BlendMode.darken,
             ),
           ),
@@ -81,7 +81,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Card(
-              color: colorScheme.surface.withOpacity(0.95),
+              color: colorScheme.surface.withValues(alpha: 0.95),
               elevation: 8,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
