@@ -40,7 +40,8 @@ class GenreItem extends StatelessWidget {
             child: Text(
               genre.title,
               style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                color: Theme.of(context).colorScheme.onSurface,
+                color: Colors.white,
+                shadows: [Shadow(color: Colors.black, offset: const Offset(1, 1), blurRadius: 10)],
               ),
               textAlign: TextAlign.center,
             ),

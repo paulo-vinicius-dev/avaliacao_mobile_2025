@@ -4,10 +4,15 @@ import 'package:path_provider/path_provider.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 
 class LocalStorage {
-  //  FAVORITOS (Lista de IDs)
+  final String? username;
+  
+  LocalStorage({this.username});
+
+  String get _userPrefix => username != null ? '${username}_' : '';
+
   Future<File> get _favoritesFile async {
     final dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/favorites.json');
+    return File('${dir.path}/${_userPrefix}favorites.json');
   }
 
   Future<List<String>> readFavorites() async {
@@ -26,10 +31,9 @@ class LocalStorage {
     await file.writeAsString(jsonEncode(ids));
   }
 
-  // STATUS (Mapa de ID -> Status)
   Future<File> get _statusFile async {
     final dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/statuses.json');
+    return File('${dir.path}/${_userPrefix}statuses.json');
   }
 
   Future<Map<String, GameStatus>> readStatuses() async {
@@ -39,7 +43,6 @@ class LocalStorage {
       final content = await file.readAsString();
       final Map<String, dynamic> json = jsonDecode(content);
 
-      // Converte String para Enum
       final Map<String, GameStatus> result = {};
       json.forEach((key, value) {
         result[key] = GameStatus.values.firstWhere(
@@ -56,7 +59,6 @@ class LocalStorage {
   Future<void> saveStatuses(Map<String, GameStatus> statuses) async {
     final file = await _statusFile;
     final Map<String, String> json = {};
-    // Converte Enum para String
     statuses.forEach((key, value) {
       if (value != GameStatus.notStarted) json[key] = value.name;
     });
