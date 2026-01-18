@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/providers/theme_provider.dart';
@@ -13,7 +14,8 @@ class MainDrawer extends ConsumerWidget {
     final currentTheme = ref.watch(themeProvider);
     final isDark = currentTheme == ThemeMode.dark;
     final authState = ref.watch(authProvider);
-    
+    final user = authState.user;
+
     final authNotifier = ref.read(authProvider.notifier);
 
     final colors = Theme.of(context).colorScheme;
@@ -21,7 +23,7 @@ class MainDrawer extends ConsumerWidget {
 
     Future<void> handleLogout() async {
       Navigator.of(context).pop();
-      
+
       final confirmed = await showDialog<bool>(
         context: context,
         builder: (ctx) {
@@ -70,7 +72,7 @@ class MainDrawer extends ConsumerWidget {
               gradient: LinearGradient(
                 colors: [
                   colors.primaryContainer,
-                  colors.primaryContainer.withValues(alpha: 0.8)
+                  colors.primaryContainer.withOpacity(0.8)
                 ],
                 begin: Alignment.topLeft,
                 end: Alignment.bottomRight,
@@ -78,10 +80,19 @@ class MainDrawer extends ConsumerWidget {
             ),
             child: Row(
               children: [
-                Icon(
-                  Icons.videogame_asset_rounded,
-                  size: 48,
-                  color: colors.onPrimaryContainer,
+                CircleAvatar(
+                  radius: 30,
+                  backgroundColor: colors.onPrimaryContainer,
+                  backgroundImage: user?.profileImagePath != null
+                      ? FileImage(File(user!.profileImagePath!))
+                      : null,
+                  child: user?.profileImagePath == null
+                      ? Icon(
+                    Icons.person,
+                    size: 30,
+                    color: colors.primary,
+                  )
+                      : null,
                 ),
                 const SizedBox(width: 15),
                 Expanded(
@@ -97,13 +108,14 @@ class MainDrawer extends ConsumerWidget {
                             color: colors.onPrimaryContainer,
                             fontWeight: FontWeight.bold),
                       ),
-                      if (authState.username != null) ...[
+                      if (user != null) ...[
                         const SizedBox(height: 4),
                         Text(
-                          'Olá, ${authState.username}!',
+                          'Olá, ${user.name}',
                           style: textTheme.bodyMedium?.copyWith(
                             color: colors.onPrimaryContainer,
                           ),
+                          overflow: TextOverflow.ellipsis,
                         ),
                       ],
                     ],
@@ -113,7 +125,7 @@ class MainDrawer extends ConsumerWidget {
             ),
           ),
           ListTile(
-            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
+            tileColor: colors.primaryContainer.withOpacity(0.8),
             leading: Icon(
               isDark ? Icons.light_mode : Icons.dark_mode,
               size: 26,
@@ -135,7 +147,7 @@ class MainDrawer extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
           ListTile(
-            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
+            tileColor: colors.primaryContainer.withOpacity(0.8),
             leading: Icon(
               Icons.info_outline,
               size: 26,
@@ -144,9 +156,9 @@ class MainDrawer extends ConsumerWidget {
             title: Text(
               'Sobre',
               style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                    color: Theme.of(context).colorScheme.onSurface,
-                    fontSize: 24,
-                  ),
+                color: Theme.of(context).colorScheme.onSurface,
+                fontSize: 24,
+              ),
             ),
             onTap: () {
               onSelectedScreen('sobre');
@@ -154,7 +166,7 @@ class MainDrawer extends ConsumerWidget {
           ),
           const SizedBox(height: 10),
           ListTile(
-            tileColor: colors.primaryContainer.withValues(alpha: 0.8),
+            tileColor: colors.primaryContainer.withOpacity(0.8),
             leading: Icon(
               Icons.logout,
               size: 26,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/providers/auth_provider.dart';
+import 'package:avaliacao_mobile_2025/screens/signup_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -11,14 +12,14 @@ class LoginScreen extends ConsumerStatefulWidget {
 
 class _LoginScreenState extends ConsumerState<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _usernameController = TextEditingController();
+  final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
   bool _obscurePassword = true;
 
   @override
   void dispose() {
-    _usernameController.dispose();
+    _emailController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
@@ -33,7 +34,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
     });
 
     final success = await ref.read(authProvider.notifier).login(
-          _usernameController.text.trim(),
+          _emailController.text.trim(),
           _passwordController.text,
         );
 
@@ -45,8 +46,8 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       if (!success) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              'Usuário ou senha inválidos',
+            content: const Text(
+              'Email ou senha inválidos',
               style: TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.red,
@@ -80,7 +81,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
           child: SingleChildScrollView(
             padding: const EdgeInsets.all(24),
             child: Card(
-              color: colorScheme.surface.withOpacity(0.95),
+              color: colorScheme.surface.withValues(alpha: 0.95),
               elevation: 8,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(16),
@@ -108,24 +109,25 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                       const SizedBox(height: 8),
                       Text(
                         'Bem-vindo! realize o login para continuar.',
+                        textAlign: TextAlign.center,
                         style: textTheme.bodyLarge?.copyWith(
                           color: colorScheme.onSurfaceVariant,
                         ),
                       ),
                       const SizedBox(height: 32),
                       TextFormField(
-                        controller: _usernameController,
+                        controller: _emailController,
                         style: TextStyle(color: colorScheme.onSurface),
                         decoration: InputDecoration(
-                          labelText: 'Usuário',
-                          prefixIcon: const Icon(Icons.person),
+                          labelText: 'Email',
+                          prefixIcon: const Icon(Icons.email),
                           border: OutlineInputBorder(
                             borderRadius: BorderRadius.circular(12),
                           ),
                         ),
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Digite seu usuário';
+                            return 'Digite seu email';
                           }
                           return null;
                         },
@@ -191,7 +193,17 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
                                 ),
                         ),
                       ),
-
+                      const SizedBox(height: 16),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).push(
+                            MaterialPageRoute(
+                              builder: (ctx) => const SignupScreen(),
+                            ),
+                          );
+                        },
+                        child: const Text('Não tem uma conta? Registre-se!'),
+                      ),
                     ],
                   ),
                 ),

@@ -37,7 +37,7 @@ final darkTheme = ThemeData(
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
+
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -66,11 +66,33 @@ class _MyAppState extends ConsumerState<MyApp> {
     final currentThemeMode = ref.watch(themeProvider);
     final authState = ref.watch(authProvider);
 
+    Widget homeWidget;
+
+    if (authState.isLoading) {
+      // Tela de Carregamento
+      homeWidget = Scaffold(
+        body: Container(
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              colors: [seedColor, Color.fromARGB(255, 60, 20, 120)],
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+            ),
+          ),
+          child: const Center(
+            child: CircularProgressIndicator(color: Colors.white),
+          ),
+        ),
+      );
+    } else {
+      homeWidget = authState.isAuthenticated ? const TabsScreen() : const LoginScreen();
+    }
+
     return MaterialApp(
       theme: lightTheme,
       darkTheme: darkTheme,
       themeMode: currentThemeMode,
-      home: authState.isAuthenticated ? const TabsScreen() : const LoginScreen(),
+      home: homeWidget,
     );
   }
 }
