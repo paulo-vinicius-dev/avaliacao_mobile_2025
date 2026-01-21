@@ -14,6 +14,18 @@ class GamesNotifier extends AsyncNotifier<List<Game>> {
     final authState = ref.watch(authProvider);
     if (authState.isAuthenticated && authState.user != null) {
       _currentUserId = authState.user!.id;
+
+      try {
+        _cachedStatuses = await _firestoreService.getUserGameStatuses(_currentUserId!);
+        _cachedFavorites = await _firestoreService.getUserFavoriteGameIds(_currentUserId!);
+      } catch (e) {
+        print('Erro ao carregar preferências no build: $e');
+      }
+    } else {
+
+      _currentUserId = null;
+      _cachedStatuses = {};
+      _cachedFavorites = [];
     }
     return await _loadGames();
   }
