@@ -19,13 +19,17 @@ class MyGamesScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final favoriteGamesIds = ref.watch(favoriteGamesProvider);
+    final favoriteGamesIdsAsync = ref.watch(favoriteGamesProvider);
 
     final axisCount = ref.watch(gridLayoutProvider);
 
-    final favoriteGames = allGames.where((game) {
-      return favoriteGamesIds.contains(game.id);
-    }).toList();
+    return favoriteGamesIdsAsync.when(
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Center(child: Text('Erro: $err')),
+      data: (favoriteGamesIds) {
+        final favoriteGames = allGames.where((game) {
+          return favoriteGamesIds.contains(game.id);
+        }).toList();
 
     if (favoriteGames.isEmpty) {
       return Center(
@@ -104,6 +108,7 @@ class MyGamesScreen extends ConsumerWidget {
         );
       },
     );
-
+      },
+    );
   }
 }

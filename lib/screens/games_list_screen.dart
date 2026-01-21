@@ -20,15 +20,31 @@ class GamesListScreen extends ConsumerStatefulWidget {
 class _GamesListScreenState extends ConsumerState<GamesListScreen> {
   @override
   Widget build(BuildContext context) {
-    final favoriteGamesIds = ref.watch(favoriteGamesProvider);
+    final favoriteGamesIdsAsync = ref.watch(favoriteGamesProvider);
     final allGames = ref.watch(gamesProvider);
     final colorScheme = Theme.of(context).colorScheme;
 
-    final filteredGames = allGames.where((game) {
-      return game.genres.contains(widget.genre.id);
-    }).toList();
+    return favoriteGamesIdsAsync.when(
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (err, stack) => Scaffold(
+        body: Center(child: Text('Erro: $err')),
+      ),
+      data: (favoriteGamesIds) {
+        return allGames.when(
+      loading: () => const Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      ),
+      error: (err, stack) => Scaffold(
+        body: Center(child: Text('Erro: $err')),
+      ),
+      data: (games) {
+        final filteredGames = games.where((game) {
+          return game.genres.contains(widget.genre.id);
+        }).toList();
 
-    return Scaffold(
+        return Scaffold(
       appBar: AppBar(
         title: Text(widget.genre.title),
         backgroundColor: widget.genre.color.withValues(alpha: 0.8),
@@ -122,6 +138,10 @@ class _GamesListScreenState extends ConsumerState<GamesListScreen> {
           );
         },
       ),
+        );
+      },
+        );
+      },
     );
   }
 }

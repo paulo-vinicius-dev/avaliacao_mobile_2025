@@ -1,58 +1,62 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
-import 'package:avaliacao_mobile_2025/data/dummy_data.dart';
-import 'package:avaliacao_mobile_2025/providers/local_storage.dart';
+import 'package:avaliacao_mobile_2025/services/firestore_service.dart';
+import 'package:avaliacao_mobile_2025/providers/auth_provider.dart';
 
-class GamesNotifier extends Notifier<List<Game>> {
-  final Map<String, GameStatus> _initialStatuses;
-  final List<String> _initialFavorites;
-  LocalStorage _storage = LocalStorage();
-
-  GamesNotifier(this._initialStatuses, this._initialFavorites);
+class GamesNotifier extends AsyncNotifier<List<Game>> {
+  final _firestoreService = FirestoreService();
+  Map<String, GameStatus> _cachedStatuses = {};
+  List<String> _cachedFavorites = [];
+  String? _currentUserId;
 
   @override
-  List<Game> build() {
-    return [
-      for (final game in myGames)
-        Game(
-          id: game.id,
-          title: game.title,
-          imageUrl: game.imageUrl,
-          genres: game.genres,
-          releaseDate: game.releaseDate,
-          status: _initialStatuses[game.id] ?? game.status,
-          isFavorite: _initialFavorites.contains(game.id),
-          hoursPlayed: game.hoursPlayed,
-          platforms: game.platforms,
-          synopsis: game.synopsis,
-        )
-    ];
+  Future<List<Game>> build() async {
+    final authState = ref.watch(authProvider);
+    if (authState.isAuthenticated && authState.user != null) {
+      _currentUserId = authState.user!.id;
+    }
+    return await _loadGames();
+  }
+
+  Future<List<Game>> _loadGames() async {
+    try {
+      final games = await _firestoreService.getAllGames();
+      
+      return [
+        for (final game in games)
+          Game(
+            id: game.id,
+            title: game.title,
+            imageUrl: game.imageUrl,
+            genres: game.genres,
+            releaseDate: game.releaseDate,
+            status: _cachedStatuses[game.id] ?? GameStatus.notStarted,
+            isFavorite: _cachedFavorites.contains(game.id),
+            hoursPlayed: game.hoursPlayed,
+            platforms: game.platforms,
+            synopsis: game.synopsis,
+          )
+      ];
+    } catch (e) {
+      print('Erro ao carregar games: $e');
+      return [];
+    }
   }
 
   void setUsername(String? username) {
-    _storage = LocalStorage(username: username);
+    // Não mais necessário - usa userId do authProvider
   }
 
   Future<void> loadUserGames(String? username) async {
-    _storage = LocalStorage(username: username);
-    final statuses = await _storage.readStatuses();
-    final favorites = await _storage.readFavorites();
+    if (_currentUserId == null) return;
     
-    state = [
-      for (final game in myGames)
-        Game(
-          id: game.id,
-          title: game.title,
-          imageUrl: game.imageUrl,
-          genres: game.genres,
-          releaseDate: game.releaseDate,
-          status: statuses[game.id] ?? GameStatus.notStarted,
-          isFavorite: favorites.contains(game.id),
-          hoursPlayed: game.hoursPlayed,
-          platforms: game.platforms,
-          synopsis: game.synopsis,
-        )
-    ];
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() async {
+      _cachedStatuses = await _firestoreService.getUserGameStatuses(_currentUserId!);
+      _cachedFavorites = await _firestoreService.getUserFavoriteGameIds(_currentUserId!);
+      
+      return await _loadGames();
+    });
   }
 
   void updateGameStatus(
@@ -60,38 +64,44 @@ class GamesNotifier extends Notifier<List<Game>> {
       GameStatus newStatus, {
         bool isFavorite = true,
       }) {
-    state = [
-      for (final game in state)
-        if (game.id == gameId)
-          Game(
-            id: game.id,
-            title: game.title,
-            imageUrl: game.imageUrl,
-            genres: game.genres,
-            releaseDate: game.releaseDate,
-            isFavorite: isFavorite,
-            status: newStatus,
-            hoursPlayed: game.hoursPlayed,
-            platforms: game.platforms,
-            synopsis: game.synopsis,
-          )
-        else
-          game,
-    ];
-    _saveStatusesToDisk();
-  }
-  
-  void _saveStatusesToDisk() {
-    final Map<String, GameStatus> statusMap = {};
-    for (final game in state) {
-      if (game.status != GameStatus.notStarted) {
-        statusMap[game.id] = game.status;
+    if (_currentUserId == null) return;
+
+    state.whenData((games) async {
+      final updatedGames = [
+        for (final game in games)
+          if (game.id == gameId)
+            Game(
+              id: game.id,
+              title: game.title,
+              imageUrl: game.imageUrl,
+              genres: game.genres,
+              releaseDate: game.releaseDate,
+              isFavorite: isFavorite,
+              status: newStatus,
+              hoursPlayed: game.hoursPlayed,
+              platforms: game.platforms,
+              synopsis: game.synopsis,
+            )
+          else
+            game,
+      ];
+      state = AsyncValue.data(updatedGames);
+      
+      // Salvar no Firebase
+      try {
+        await _firestoreService.saveUserGame(
+          userId: _currentUserId!,
+          gameId: gameId,
+          isFavorite: isFavorite,
+          status: newStatus,
+        );
+      } catch (e) {
+        print('Erro ao salvar status: $e');
       }
-    }
-    _storage.saveStatuses(statusMap);
+    });
   }
 }
 
-final gamesProvider = NotifierProvider<GamesNotifier, List<Game>>(() {
-  return GamesNotifier({}, []);
+final gamesProvider = AsyncNotifierProvider<GamesNotifier, List<Game>>(() {
+  return GamesNotifier();
 });

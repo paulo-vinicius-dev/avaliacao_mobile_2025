@@ -4,18 +4,12 @@ class User {
     required this.name,
     required this.email,
     this.profileImagePath,
-    List<String>? favoriteGamesIds,
-  }) : favoriteGamesIds = favoriteGamesIds ?? [];
+  });
 
   final String id;
   String name;
   String email;
   String? profileImagePath;
-  List<String> favoriteGamesIds;
-
-  bool isFavorite(String gameId) {
-    return favoriteGamesIds.contains(gameId);
-  }
 
   Map<String, dynamic> toMap() {
     return {
@@ -23,7 +17,6 @@ class User {
       'name': name,
       'email': email,
       'profileImagePath': profileImagePath,
-      'favoriteGamesIds': favoriteGamesIds,
     };
   }
 
@@ -33,7 +26,6 @@ class User {
       name: map['name'],
       email: map['email'],
       profileImagePath: map['profileImagePath'],
-      favoriteGamesIds: List<String>.from(map['favoriteGamesIds'] ?? []),
     );
   }
 }

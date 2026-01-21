@@ -1,5 +1,5 @@
 name: avaliacao_mobile_2025
-description: "A new Flutter project."
+description: "PlayLegacy - Your game collection manager"
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -41,6 +41,10 @@ dependencies:
   shared_preferences: ^2.5.3
   path_provider: ^2.1.5
   image_picker: ^1.1.2
+  firebase_core: ^4.4.0
+  firebase_auth: ^6.1.4
+  cloud_firestore: ^6.1.2
+  google_sign_in: ^6.2.1
 
 dev_dependencies:
   flutter_test:

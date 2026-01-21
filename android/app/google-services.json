@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "547801780046",
+    "project_id": "playlegacy-e8e6d",
+    "storage_bucket": "playlegacy-e8e6d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:547801780046:android:63dc8ecafa944712ba181f",
+        "android_client_info": {
+          "package_name": "com.playlegacy.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDSgilO5Tlf0Sb33A9A4-z9bXA-_PslM74"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

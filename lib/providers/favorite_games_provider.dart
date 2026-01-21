@@ -1,56 +1,101 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:avaliacao_mobile_2025/models/game.dart';
 import 'package:avaliacao_mobile_2025/providers/games_provider.dart';
-import 'package:avaliacao_mobile_2025/providers/local_storage.dart';
+import 'package:avaliacao_mobile_2025/providers/auth_provider.dart';
+import 'package:avaliacao_mobile_2025/services/firestore_service.dart';
 
-class FavoriteGamesNotifier extends Notifier<List<String>> {
-  final List<String> _initialFavorites;
-  LocalStorage _storage = LocalStorage();
-
-  FavoriteGamesNotifier(this._initialFavorites);
+class FavoriteGamesNotifier extends AsyncNotifier<List<String>> {
+  final _firestoreService = FirestoreService();
+  String? _currentUserId;
 
   @override
-  List<String> build() {
-     return _initialFavorites;
+  Future<List<String>> build() async {
+    final authState = ref.watch(authProvider);
+    if (authState.isAuthenticated && authState.user != null) {
+      _currentUserId = authState.user!.id;
+      return await _loadFavorites();
+    }
+    return [];
   }
 
-  void setUsername(String? username) {
-    _storage = LocalStorage(username: username);
+  Future<List<String>> _loadFavorites() async {
+    if (_currentUserId == null) return [];
+    
+    try {
+      return await _firestoreService.getUserFavoriteGameIds(_currentUserId!);
+    } catch (e) {
+      print('Erro ao carregar favoritos: $e');
+      return [];
+    }
   }
 
   Future<void> loadUserFavorites(String? username) async {
-    _storage = LocalStorage(username: username);
-    final favorites = await _storage.readFavorites();
-    state = favorites;
+    if (_currentUserId == null) return;
+    
+    state = const AsyncValue.loading();
+    state = await AsyncValue.guard(() => _loadFavorites());
   }
 
-  void toggleFavorite(String gameId) {
+  Future<void> toggleFavorite(String gameId) async {
+    if (_currentUserId == null) return;
 
-    if (state.contains(gameId)) {
-      state = state.where((id) => id != gameId).toList();
-      ref
-          .read(gamesProvider.notifier)
-          .updateGameStatus(gameId, GameStatus.notStarted, isFavorite: false);
-    } else {
-      state = [...state, gameId];
-      ref
-          .read(gamesProvider.notifier)
-          .updateGameStatus(gameId, GameStatus.wishPlay, isFavorite: true);
-    }
-
-    _storage.saveFavorites(state);
+    state.whenData((favorites) async {
+      final isFav = favorites.contains(gameId);
+      
+      try {
+        if (isFav) {
+          // Remove favorito
+          await _firestoreService.updateUserGameFavorite(
+            userId: _currentUserId!,
+            gameId: gameId,
+            isFavorite: false,
+          );
+          
+          state = AsyncValue.data(
+            favorites.where((id) => id != gameId).toList(),
+          );
+          
+          ref.read(gamesProvider.notifier).updateGameStatus(
+            gameId,
+            GameStatus.notStarted,
+            isFavorite: false,
+          );
+        } else {
+          // Adiciona favorito
+          await _firestoreService.updateUserGameFavorite(
+            userId: _currentUserId!,
+            gameId: gameId,
+            isFavorite: true,
+          );
+          
+          state = AsyncValue.data([...favorites, gameId]);
+          
+          ref.read(gamesProvider.notifier).updateGameStatus(
+            gameId,
+            GameStatus.wishPlay,
+            isFavorite: true,
+          );
+        }
+      } catch (e) {
+        print('Erro ao atualizar favorito: $e');
+      }
+    });
   }
 
   bool isFavorite(String gameId) {
-    return state.contains(gameId);
+    return state.when(
+      data: (favorites) => favorites.contains(gameId),
+      loading: () => false,
+      error: (_, __) => false,
+    );
   }
   
   void clearFavorites() {
-    state = [];
+    state = const AsyncValue.data([]);
   }
 }
 
 final favoriteGamesProvider =
-  NotifierProvider<FavoriteGamesNotifier, List<String>>(() {
-    return FavoriteGamesNotifier([]);
+  AsyncNotifierProvider<FavoriteGamesNotifier, List<String>>(() {
+    return FavoriteGamesNotifier();
 });

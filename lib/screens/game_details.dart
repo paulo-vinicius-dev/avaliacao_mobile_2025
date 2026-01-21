@@ -19,18 +19,21 @@ class _GameDetailsScreenState extends ConsumerState<GameDetailsScreen> {
     final colorScheme = Theme.of(context).colorScheme;
     final textTheme = Theme.of(context).textTheme;
     
-    final games = ref.watch(gamesProvider);
-    final currentGame = games.firstWhere(
-      (g) => g.id == widget.game.id,
-      orElse: () => widget.game,
-    );
+    final gamesAsync = ref.watch(gamesProvider);
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(currentGame.title),
-        backgroundColor: currentGame.getStatusColor(currentGame.status).withValues(alpha: 0.8),
-      ),
-      body: SingleChildScrollView(
+    return gamesAsync.when(
+      data: (games) {
+        final currentGame = games.firstWhere(
+          (g) => g.id == widget.game.id,
+          orElse: () => widget.game,
+        );
+
+        return Scaffold(
+          appBar: AppBar(
+            title: Text(currentGame.title),
+            backgroundColor: currentGame.getStatusColor(currentGame.status).withValues(alpha: 0.8),
+          ),
+          body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -111,6 +114,34 @@ class _GameDetailsScreenState extends ConsumerState<GameDetailsScreen> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+      },
+      loading: () => Scaffold(
+        appBar: AppBar(
+          title: Text(widget.game.title),
+        ),
+        body: const Center(child: CircularProgressIndicator()),
+      ),
+      error: (error, stack) => Scaffold(
+        appBar: AppBar(
+          title: const Text('Erro'),
+        ),
+        body: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(Icons.error_outline, size: 64, color: Colors.red),
+              const SizedBox(height: 16),
+              Text('Erro ao carregar: $error'),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('Voltar'),
+              ),
+            ],
+          ),
         ),
       ),
     );

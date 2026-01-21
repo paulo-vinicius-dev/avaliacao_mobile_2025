@@ -1,1 +1,3 @@
-# avaliacao_mobile_2025
+# PlayLegacy
+
+Gerenciador de coleção de jogos com autenticação Firebase.
