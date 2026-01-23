@@ -12,7 +12,20 @@
           "package_name": "com.playlegacy.app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "547801780046-kkod9roaeua6117raqau6e36of945129.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.playlegacy.app",
+            "certificate_hash": "21480fba01eb18301c67b294f2630a8a3e4e5488"
+          }
+        },
+        {
+          "client_id": "547801780046-1pu5tcgmc33q0b5f72f8tkurndeer9i0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDSgilO5Tlf0Sb33A9A4-z9bXA-_PslM74"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "547801780046-1pu5tcgmc33q0b5f72f8tkurndeer9i0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

@@ -71,14 +71,15 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
       });
 
       if (!success) {
+        final authState = ref.read(authProvider);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text(
-              'Erro ao fazer login com Google',
-              style: TextStyle(color: Colors.white),
+            content: Text(
+              authState.errorMessage ?? 'Erro ao fazer login com Google',
+              style: const TextStyle(color: Colors.white),
             ),
             backgroundColor: Colors.red,
-            duration: const Duration(seconds: 3),
+            duration: const Duration(seconds: 4),
           ),
         );
       }

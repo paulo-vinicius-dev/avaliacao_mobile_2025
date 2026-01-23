@@ -45,7 +45,10 @@ class AuthState {
 
 class AuthNotifier extends Notifier<AuthState> {
   final _auth = fb_auth.FirebaseAuth.instance;
-  final _googleSignIn = GoogleSignIn();
+  final _googleSignIn = GoogleSignIn(
+    scopes: ['email'],
+    serverClientId: '547801780046-1pu5tcgmc33q0b5f72f8tkurndeer9i0.apps.googleusercontent.com',
+  );
   final _firestoreService = FirestoreService();
 
   @override
@@ -97,19 +100,23 @@ class AuthNotifier extends Notifier<AuthState> {
   Future<bool> loginWithGoogle() async {
     try {
       state = AuthState.loading();
+      
       final googleUser = await _googleSignIn.signIn();
+      
       if (googleUser == null) {
         state = AuthState.unauthenticated();
         return false;
       }
 
       final googleAuth = await googleUser.authentication;
+      
       final credential = fb_auth.GoogleAuthProvider.credential(
         accessToken: googleAuth.accessToken,
         idToken: googleAuth.idToken,
       );
 
       final userCredential = await _auth.signInWithCredential(credential);
+      
       if (userCredential.user != null) {
         // Verificar se é novo usuário
         final user = await _firestoreService.getUserById(userCredential.user!.uid);
@@ -127,8 +134,11 @@ class AuthNotifier extends Notifier<AuthState> {
         return true;
       }
       return false;
+    } on fb_auth.FirebaseAuthException catch (e) {
+      state = AuthState.error('Erro Firebase: ${e.message ?? e.code}');
+      return false;
     } catch (e) {
-      state = AuthState.error('Erro ao fazer login com Google');
+      state = AuthState.error('Erro ao fazer login com Google: $e');
       return false;
     }
   }
